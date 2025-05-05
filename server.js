@@ -14,6 +14,7 @@ app.get('/', (req, res) => {
 });
 // Define the port number the server will listen on
 const PORT = 3000;
+const NODE_ENV = process.env.NODE_ENV || 'production';
  
 // Start the server and listen on the specified port
 app.listen(PORT, () => {
