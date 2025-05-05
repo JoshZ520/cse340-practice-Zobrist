@@ -1,13 +1,14 @@
 // Import express using ESM syntax
 import express from 'express';
- 
+app.set('view engine', 'ejs');
+app.set("views",  path.join(__dirname, 'src/views'));
 // Create an instance of an Express application
 const app = express();
  
 const name = process.env.NAME;
 // Define a route handler for the root URL ('/')
 app.get('/', (req, res) => {
-    res.send(`Hello, ${name}`);
+    res.send(`Hello" ${name || 'World'}!`);
 });
  app.get('/new-route', (req, res) => {
     res.send('This is a new route!');
@@ -20,3 +21,4 @@ const NODE_ENV = process.env.NODE_ENV || 'production';
 app.listen(PORT, () => {
     console.log(`Server is running on http://127.0.0.1:${PORT}`);
 });
+
