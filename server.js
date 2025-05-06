@@ -5,14 +5,24 @@ app.set("views",  path.join(__dirname, 'src/views'));
 // Create an instance of an Express application
 const app = express();
  
-const name = process.env.NAME;
 // Define a route handler for the root URL ('/')
 app.get('/', (req, res) => {
-    res.send(`Hello" ${name || 'World'}!`);
+    const title = "Home Page";
+    const content = "<h1>Welcome to the Home Page</h1><p>This is the main content.</p>";
+    res.render("index", { title, content });
 });
- app.get('/new-route', (req, res) => {
-    res.send('This is a new route!');
-});
+app.get('/about', (req, res) => {
+    const title = "About Page";
+    const content = "<h1>About Us</h1><p>This is the about page content.</p>";
+    res.render("index", { title, content });
+}
+);
+app.get('/contact', (req, res) => {
+    const title = "Contact Page";
+    const content = "<h1>Contact Us</h1><p>Josh Zobrist</p><form action="/submit" method="POST"><input type="text" name="name" placeholder="Your Name"><input type="email" name="email" placeholder="Your Email"><textarea name="message" placeholder="Your Message"></textarea><button type="submit">Submit</button></form>";
+    res.render("index", { title, content });
+}
+); 
 // Define the port number the server will listen on
 const PORT = 3000;
 const NODE_ENV = process.env.NODE_ENV || 'production';
