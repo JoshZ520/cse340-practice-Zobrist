@@ -4,7 +4,7 @@ import express from 'express';
 // Create an instance of an Express application
 const app = express();
 app.set('view engine', 'ejs');
-app.set("views",  path.join(__dirname, 'src/views'));
+app.set("views",  path.join(__dirname, '/views'));
 if (NODE_ENV.includes('dev')) {
     const ws = await import('ws');
 
