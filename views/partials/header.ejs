@@ -10,7 +10,7 @@
         const host = window.location.hostname;
         const currentPort = window.location.port;
 
-        const wsPort = currentPort ? (parseInt(currentPort) + 1) : 3001;+ 1) : 3001;
+        const wsPort = currentPort ? (parseInt(currentPort) + 1) : 3001;
 
         const ws = new WebSocket(`ws://${host}:${wsPort}`);
         ws.onclose = () => {
