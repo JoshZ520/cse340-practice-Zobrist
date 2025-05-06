@@ -19,7 +19,7 @@ app.get('/about', (req, res) => {
 );
 app.get('/contact', (req, res) => {
     const title = "Contact Page";
-    const content = "<h1>Contact Us</h1><p>Josh Zobrist</p><form action="/submit" method="POST"><input type="text" name="name" placeholder="Your Name"><input type="email" name="email" placeholder="Your Email"><textarea name="message" placeholder="Your Message"></textarea><button type="submit">Submit</button></form>";
+    const content = "<h1>Contact Us</h1><ul><li>Josh</li><li>7252517881</li><li>joshuazob@gmail.com</li></ul>";
     res.render("index", { title, content });
 }
 ); 
