@@ -22,9 +22,9 @@ if (NODE_ENV.includes('dev')) {
         wsServer.on('listening', () => {
             console.log(`WebSocket server is running on port ${wsPort}`);
     });
-    wsServer.on("listening", () => {
-        console.error('WebSocket server error', error);
-    });
+    // wsServer.on("listening", () => {
+    //     console.error('WebSocket server error', error);
+    // });
 
 }
     catch (error) {
