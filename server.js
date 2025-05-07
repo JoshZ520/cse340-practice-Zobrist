@@ -35,18 +35,18 @@ if (NODE_ENV.includes('dev')) {
 app.get('/', (req, res) => {
     const title = "Home Page";
     const content = "<h1>Welcome to the Home Page</h1><p>This is the main content.</p>";
-    res.render("index", { title, content });
+    res.render("index", { title, content, NODE_ENV });
 });
 app.get('/about', (req, res) => {
     const title = "About Page";
     const content = "<h1>About Us</h1><p>This is the about page content.</p>";
-    res.render("index", { title, content });
+    res.render("index", { title, content, NODE_ENV });
 }
 );
 app.get('/contact', (req, res) => {
     const title = "Contact Page";
     const content = "<h1>Contact Us</h1><ul><li>Josh</li><li>7252517881</li><li>joshuazob@gmail.com</li></ul>";
-    res.render("index", { title, content });
+    res.render("index", { title, content, NODE_ENV });
 }
 ); 
 
