@@ -34,6 +34,12 @@ app.get('/contact', (req, res) => {
     res.render("index", { title, content, NODE_ENV });
 }
 ); 
+app.get('/products', (req, res) => {
+    const title = 'Product Page';
+    const content = "<h1>Products</h1>";
+    res.render("products", {title, content, NODE_ENV});
+    
+})
 if (NODE_ENV.includes('dev')) {
     const ws = await import('ws');
 
