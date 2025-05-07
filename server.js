@@ -11,26 +11,11 @@ const __dirname = path.dirname(__filename);
 // Create an instance of an Express application
 const app = express();
 app.set('view engine', 'ejs');
+
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.set("views",  path.join(__dirname, 'src/views'));
-if (NODE_ENV.includes('dev')) {
-    const ws = await import('ws');
 
-    try {
-        const wsPort = parseInt(PORT) + 1;
-        const wsServer = new ws.WebSocketServer({ port: wsPort });
-
-        wsServer.on('listening', () => {
-            console.log(`WebSocket server is running on port ${wsPort}`);
-    });
-    // wsServer.on("listening", () => {
-    //     console.error('WebSocket server error', error);
-    // });
-
-}
-    catch (error) {
-    console.error('WebSocket server failed to start', error);
-};
-}
 // Define a route handler for the root URL ('/')
 app.get('/', (req, res) => {
     const title = "Home Page";
@@ -49,7 +34,24 @@ app.get('/contact', (req, res) => {
     res.render("index", { title, content, NODE_ENV });
 }
 ); 
+if (NODE_ENV.includes('dev')) {
+    const ws = await import('ws');
 
+    try {
+        const wsPort = parseInt(PORT) + 1;
+        const wsServer = new ws.WebSocketServer({ port: wsPort });
+
+        wsServer.on('listening', () => {
+            console.log(`WebSocket server is running on port ${wsPort}`);
+    });
+    wsServer.on("listening", (error) => {
+        console.error('WebSocket server error', error);
+    });
+
+    } catch (error) {
+    console.error('WebSocket server failed to start', error);
+    };
+}
  
 // Start the server and listen on the specified port
 app.listen(PORT, () => {
