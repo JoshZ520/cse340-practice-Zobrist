@@ -1,6 +1,13 @@
 // Import express using ESM syntax
 import express from 'express';
+import { fileURLToPath } from 'url';
+import path from 'path';
 
+const NODE_ENV = process.env.NODE_ENV || 'production';
+const PORT = process.env.PORT || 3000;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 // Create an instance of an Express application
 const app = express();
 app.set('view engine', 'ejs');
@@ -18,7 +25,7 @@ if (NODE_ENV.includes('dev')) {
     wsServer.on("listening", () => {
         console.error('WebSocket server error', error);
     });
-    
+
 }
     catch (error) {
     console.error('WebSocket server failed to start', error);
@@ -42,9 +49,7 @@ app.get('/contact', (req, res) => {
     res.render("index", { title, content });
 }
 ); 
-// Define the port number the server will listen on
-const PORT = 3000;
-const NODE_ENV = process.env.NODE_ENV || 'production';
+
  
 // Start the server and listen on the specified port
 app.listen(PORT, () => {
