@@ -28,17 +28,29 @@ app.get('/about', (req, res) => {
     res.render("index", { title, content, NODE_ENV });
 }
 );
-app.get('/contact', (req, res) => {
-    const title = "Contact Page";
-    const content = "<h1>Contact Us</h1><ul><li>Josh</li><li>7252517881</li><li>joshuazob@gmail.com</li></ul>";
-    res.render("index", { title, content, NODE_ENV });
-}
-); 
+
 app.get('/products', (req, res) => {
     const title = 'Product Page';
     const content = "<h1>Products</h1>";
     res.render("index", {title, content, NODE_ENV});
 
+});
+app.use((req, res, next) => {
+    const err = new Error('Page Not Found');
+    err.status = 404;
+    next(err);
+});
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    const status = err.status || 500;
+    const context = {
+        title: status === 404 ? 'Page Not Found' : 'Internal Server Error',
+        error: err.message,
+        stack: err.stack,
+        mode,
+        port
+    };
+    res.status(status).render(`errors/${status === 404 ? '404' : '500'}`, context);
 });
 if (NODE_ENV.includes('dev')) {
     const ws = await import('ws');

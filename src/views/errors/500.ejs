@@ -1,0 +1,12 @@
+<%- include('../partials/header.ejs') %>
+<main>
+    <!-- Tell the user that there was an internal server error -->
+    <h1>Internal Server Error</h1>
+    <p>Sorry, there was an internal server error.</p>
+    <p>Error details (for development only):</p>
+    <pre>
+        <%= error %></pre>
+        <p>Stack trace:</p>
+        <pre><%= stack %></pre>
+</main>
+<%- include('../partials/footer.ejs') %>
