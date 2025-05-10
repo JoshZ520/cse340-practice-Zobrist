@@ -35,6 +35,17 @@ app.get('/products', (req, res) => {
     res.render("index", {title, content, NODE_ENV});
 
 });
+// Test route that deliberately throws an error
+app.get('/test-error', (req, res, next) => {
+    try {
+        // Intentionally trigger an error
+        const nonExistentVariable = undefinedVariable;
+        res.send('This will never be reached');
+    } catch (err) {
+        // Forward the error to the global error handler
+        next(err);
+    }
+});
 app.use((req, res, next) => {
     const err = new Error('Page Not Found');
     err.status = 404;
@@ -47,8 +58,8 @@ app.use((err, req, res, next) => {
         title: status === 404 ? 'Page Not Found' : 'Internal Server Error',
         error: err.message,
         stack: err.stack,
-        mode,
-        port
+        NODE_ENV,
+        PORT
     };
     res.status(status).render(`errors/${status === 404 ? '404' : '500'}`, context);
 });
