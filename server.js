@@ -35,6 +35,18 @@ app.get('/products', (req, res) => {
     res.render("index", {title, content, NODE_ENV});
 
 });
+
+// New explore page handler
+app.get('/explore/:category/:id', (req, res) => {
+    const {category, id} = req.params;
+
+    console.log('Route Parameters:', req.params);
+
+   const title = `Exploring ${category}`;
+
+   res.render('explore', {title, category, id, NODE_ENV});
+    
+})
 // Test route that deliberately throws an error
 app.get('/test-error', (req, res, next) => {
     try {
