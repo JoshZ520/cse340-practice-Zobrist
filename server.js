@@ -16,6 +16,42 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.set("views",  path.join(__dirname, 'src/views'));
 
+app.use((req, res, next) => {
+    res.locals.currentYear = new Date().getFullYear();
+    next();
+});
+
+app.use((req, res, next) => {
+    console.log(`Method: ${req.method}, URL: ${req.url}`);
+    next();
+});
+// Sample product data
+const products = [
+    {
+        id: 1,
+        name: "Kindle E-Reader",
+        description: "Lightweight e-reader with a glare-free display and weeks of battery life.",
+        price: 149.99,
+        image: "https://picsum.photos/id/367/800/600"
+    },
+    {
+        id: 2,
+        name: "Vintage Film Camera",
+        description: "Capture timeless moments with this classic vintage film camera, perfect for photography enthusiasts.",
+        price: 199.99,
+        image: "https://picsum.photos/id/250/800/600"
+    }
+];
+ 
+// Middleware to validate display parameter
+const validateDisplayMode = (req, res, next) => {
+    const { display } = req.params;
+    if (display !== 'grid' && display !== 'details') {
+        const error = new Error('Invalid display mode: must be either "grid" or "details".');
+        next(error); // Pass control to the error-handling middleware
+    }
+    next(); // Pass control to the next middleware or route
+};
 // Define a route handler for the root URL ('/')
 app.get('/', (req, res) => {
     const title = "Home Page";
@@ -29,22 +65,30 @@ app.get('/about', (req, res) => {
 }
 );
 
+// Products page route with display mode validation
+app.get('/products/:display', validateDisplayMode, (req, res) => {
+    const title = "Our Products";
+    const { display } = req.params;
+    res.render('products', { title, products, display, NODE_ENV });
+});
+ 
+// Default products route (redirects to grid view)
 app.get('/products', (req, res) => {
-    const title = 'Product Page';
-    const content = "<h1>Products</h1>";
-    res.render("index", {title, content, NODE_ENV});
-
+    res.redirect('/products/grid');
 });
 
 // New explore page handler
 app.get('/explore/:category/:id', (req, res) => {
     const {category, id} = req.params;
 
+    const { sort = 'default', filter = 'none'} = req.query;
+
     console.log('Route Parameters:', req.params);
+    console.log('Query Parameters:', req.query);
 
    const title = `Exploring ${category}`;
 
-   res.render('explore', {title, category, id, NODE_ENV});
+   res.render('explore', {title, category, id, sort, filter, NODE_ENV});
     
 })
 // Test route that deliberately throws an error
