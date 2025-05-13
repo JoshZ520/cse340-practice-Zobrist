@@ -66,19 +66,16 @@ app.get('/about', (req, res) => {
     res.render("index", { title, content, NODE_ENV });
 }
 );
-
 // Products page route with display mode validation
 app.get('/products/:display', validateDisplayMode, (req, res) => {
     const title = "Our Products";
     const { display } = req.params;
     res.render('products', { title, products, display, NODE_ENV });
 });
- 
 // Default products route (redirects to grid view)
 app.get('/products', (req, res) => {
     res.redirect('/products/grid');
 });
-
 // New explore page handler
 app.get('/explore/:category/:id', (req, res) => {
     const {category, id} = req.params;
