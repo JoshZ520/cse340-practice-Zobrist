@@ -1,7 +1,7 @@
-app.use((req, res, next) => {
+export const addGlobalData = (req, res, next) => {
     res.locals.currentYear = new Date().getFullYear();
     
     res.locals.NODE_ENV = process.env.NODE_ENV || 'development';
 
     next();
-});
+};
