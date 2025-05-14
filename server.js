@@ -20,6 +20,9 @@ app.set("views",  path.join(__dirname, 'src/views'));
 
 app.use((req, res, next) => {
     res.locals.currentYear = new Date().getFullYear();
+    
+    res.locals.NODE_ENV = process.env.NODE_ENV || 'development';
+
     next();
 });
 
@@ -58,19 +61,19 @@ const validateDisplayMode = (req, res, next) => {
 app.get('/', (req, res) => {
     const title = "Home Page";
     const content = "<h1>Welcome to the Home Page</h1><p>This is the main content.</p>";
-    res.render("index", { title, content, NODE_ENV });
+    res.render("index", { title, content });
 });
 app.get('/about', (req, res) => {
     const title = "About Page";
     const content = "<h1>About Us</h1><p>This is the about page content.</p>";
-    res.render("index", { title, content, NODE_ENV });
+    res.render("index", { title, content });
 }
 );
 // Products page route with display mode validation
 app.get('/products/:display', validateDisplayMode, (req, res) => {
     const title = "Our Products";
     const { display } = req.params;
-    res.render('products', { title, products, display, NODE_ENV });
+    res.render('products', { title, products, display });
 });
 // Default products route (redirects to grid view)
 app.get('/products', (req, res) => {
@@ -87,7 +90,7 @@ app.get('/explore/:category/:id', (req, res) => {
 
    const title = `Exploring ${category}`;
 
-   res.render('explore', {title, category, id, sort, filter, NODE_ENV});
+   res.render('explore', {title, category, id, sort, filter});
     
 })
 // Test route that deliberately throws an error
