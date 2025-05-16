@@ -23,7 +23,7 @@ app.set("views",  path.join(__dirname, 'src/views'));
 app.use(addGlobalData);
 
 app.use('/', indexRoutes);
-app.use('/explore', exploreRoutes);
+app.use('/explore', exploreRoutes)
 
 app.use((req, res, next) => {
     const err = new Error('Page Not Found');

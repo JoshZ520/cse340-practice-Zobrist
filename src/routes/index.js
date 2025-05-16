@@ -29,23 +29,23 @@ const validateDisplayMode = (req, res, next) => {
     next(); // Pass control to the next middleware or route
 };
 // Define a route handler for the root URL ('/')
-app.get('/', (req, res) => {
+router.get('/', (req, res) => {
     const title = "Home Page";
     const content = "<h1>Welcome to the Home Page</h1><p>This is the main content.</p>";
     res.render("index", { title, content });
 });
-app.get('/about', (req, res) => {
+router.get('/about', (req, res) => {
     const title = "About Page";
     const content = "<h1>About Us</h1><p>This is the about page content.</p>";
     res.render("index", { title, content });
 }
 );
 // Default products route (redirects to grid view)
-app.get('/products', (req, res) => {
+router.get('/products', (req, res) => {
     res.redirect('/products/grid');
 });
 // Products page route with display mode validation
-app.get('/products/:display', validateDisplayMode, (req, res) => {
+router.get('/products/:display', validateDisplayMode, (req, res) => {
     const title = "Our Products";
     const { display } = req.params;
     res.render('products', { title, products, display });
