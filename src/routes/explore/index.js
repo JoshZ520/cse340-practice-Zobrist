@@ -35,7 +35,7 @@ router.get('/:category/:id', async (req, res) => {
         category: categoryData,
         item: itemData,
         categoryId: category,
-        itemId: id
+        id
     });
 });
  
