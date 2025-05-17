@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getCategory, getItem, getRandomProduct } from '../../models/explore-data.js';
+import { getAllCategories, getCategory, getCategoryItems, getRandomProduct } from '../../models/explore-data.js';
  
 const router = Router();
  
@@ -9,34 +9,49 @@ const router = Router();
  * organized and makes it easier to maintain and expand.
  */
  
-// Route for /explore - redirects to a random product
+// Route for /explore - redirects to a random category
 router.get('/', async (req, res) => {
     const randomProduct = await getRandomProduct();
-    res.redirect(`/explore/${randomProduct.category}/${randomProduct.id}`);
+    res.redirect(`/explore/${randomProduct.category}`);
 });
  
-// Route with multiple parameters
-router.get('/:category/:id', async (req, res) => {
-    const { category, id } = req.params;
+// Route for viewing a category and its items
+router.get('/:category', async (req, res) => {
+    const { category } = req.params;
  
-    // Use await to get data from the model
+    // Use model to get category data
     const categoryData = await getCategory(category);
-    const itemData = await getItem(category, id);
  
-    // Check if data exists
-    if (!categoryData || !itemData) {
-        return res.status(404).render('errors/404', { 
-            title: 'Item Not Found' 
-        });
+    // Check if category exists
+    if (!categoryData) {
+        /**
+         * If the category or item doesn't exist, create a 404 error
+         * and pass it to the error handler by throwing it. This is
+         * possible in Express 5+ because it automatically catches async
+         * errors and passes them to your registered error handler.
+         */
+        const err = new Error('Category Not Found');
+        err.status = 404;
+        throw err;
     }
  
+    // Get the items in this category
+    const items = await getCategoryItems(category);
+ 
+    // Render the explore template with category and items
     res.render('explore', { 
         title: `Exploring ${categoryData.name}`,
-        category: categoryData,
-        item: itemData,
         categoryId: category,
-        id
+        categoryName: categoryData.name,
+        categoryDescription: categoryData.description,
+        items: items
     });
+});
+ 
+// Redirect item routes to category page
+router.get('/:category/:id', async (req, res) => {
+    const { category } = req.params;
+    res.redirect(`/explore/${category}`);
 });
  
 export default router;
