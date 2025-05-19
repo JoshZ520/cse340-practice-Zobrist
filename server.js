@@ -25,11 +25,18 @@ app.use(addGlobalData);
 app.use('/', indexRoutes);
 app.use('/explore', exploreRoutes)
 
+app.get('/error', (req, res, next) => {
+    const err = new Error('This is a manually triggered error');
+    err.status = 500;
+    next(err); // Forward to the global error handler
+});
+
 app.use((req, res, next) => {
     const err = new Error('Page Not Found');
     err.status = 404;
     next(err);
 });
+
 app.use((err, req, res, next) => {
     console.error(err.stack);
     const status = err.status || 500;
