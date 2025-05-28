@@ -11,7 +11,7 @@
         per row and more information displayed.
     -->
     <div class="products-container <%= display === 'grid' ? 'grid-view' : 'details-view' %>">
-        <% products.forEach(product => { %>
+       <% Object.entries(items).forEach(([itemId, product])  => { %>
             <div class="product-card">
                 <img src="<%= product.image %>" alt="<%= product.name %>" class="product-image">
                 <div class="product-info">
