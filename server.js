@@ -3,7 +3,7 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import indexRoutes from './src/routes/index.js';
-import exploreRoutes from './src/routes/explore/index.js';
+import productsRoutes from './src/routes/products/index.js';
 import { addGlobalData } from './src/middleware/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -23,7 +23,7 @@ app.set("views",  path.join(__dirname, 'src/views'));
 app.use(addGlobalData);
 
 app.use('/', indexRoutes);
-app.use('/explore', exploreRoutes)
+app.use('/products', productsRoutes)
 
 app.get('/error', (req, res, next) => {
     const err = new Error('This is a manually triggered error');
