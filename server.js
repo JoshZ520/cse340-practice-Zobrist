@@ -5,11 +5,13 @@ import { fileURLToPath } from 'url';
 import indexRoutes from './src/routes/index.js';
 import productsRoutes from './src/routes/products/index.js';
 import { addGlobalData } from './src/middleware/index.js';
+import { setupDatabase, testConnection } from './src/models/setup.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const NODE_ENV = process.env.NODE_ENV || 'production';
 const PORT = process.env.PORT || 3000;
+
 
 // Create an instance of an Express application
 const app = express();
