@@ -14,7 +14,7 @@ import db from './db.js';
 const createCategoriesTable = `
     CREATE TABLE IF NOT EXISTS categories (
         id SERIAL PRIMARY KEY,
-        name VARCHAR(100) NOT NULL,
+        name VARCHAR(255) NOT NULL,
         slug VARCHAR(100) NOT NULL UNIQUE,
         description TEXT,
         parent_id INTEGER REFERENCES categories(id),
@@ -22,6 +22,16 @@ const createCategoriesTable = `
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 `;
+const createProductsTable = `
+    CREATE TABLE IF NOT EXISTS products (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        description TEXT NOT NULL,
+        price DECIMAL(10,2) NOT NULL,
+        image VARCHAR(500) NOT NULL
+    );
+`;
+
  
 /**
  * Initial categories to populate the database.
@@ -72,6 +82,7 @@ const initialCategories = [
         show_in_nav: false
     }
 ];
+
  
 /**
  * Inserts a category into the database if it doesn't already exist.
@@ -100,8 +111,9 @@ const insertCategory = async (category, verbose = true) => {
  * This function should be called when the server starts.
  */
 const setupDatabase = async () => {
+    await db.query(createProductsTable);
     const verbose = process.env.DISABLE_SQL_LOGGING !== 'true';
- 
+    if (verbose) console.log('Products table ready');
     try {
         if (verbose) console.log('Setting up database...');
  

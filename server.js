@@ -6,6 +6,7 @@ import indexRoutes from './src/routes/index.js';
 import productsRoutes from './src/routes/products/index.js';
 import { addGlobalData } from './src/middleware/index.js';
 import { setupDatabase, testConnection } from './src/models/setup.js';
+import dashboardRoutes from './src/routes/dashboard/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,6 +19,12 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Middleware to parse JSON data in request body
+app.use(express.json());
+ 
+// Middleware to parse URL-encoded form data (like from a standard HTML form)
+app.use(express.urlencoded({ extended: true }));
+
 app.set('view engine', 'ejs');
 
 app.set("views",  path.join(__dirname, 'src/views'));
@@ -25,7 +32,8 @@ app.set("views",  path.join(__dirname, 'src/views'));
 app.use(addGlobalData);
 
 app.use('/', indexRoutes);
-app.use('/products', productsRoutes)
+app.use('/products', productsRoutes);
+app.use('/dashboard', dashboardRoutes);
 
 app.get('/error', (req, res, next) => {
     const err = new Error('This is a manually triggered error');
@@ -69,7 +77,14 @@ if (NODE_ENV.includes('dev')) {
 }
  
 // Start the server and listen on the specified port
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
+    try {
+        await testConnection();
+        await setupDatabase();
+    } catch (error) {
+        console.error('Database setup faild: ', error);
+        process.exit(1);
+    }
     console.log(`Server is running on http://127.0.0.1:${PORT}`);
 });
 
