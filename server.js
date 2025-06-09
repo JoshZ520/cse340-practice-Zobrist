@@ -7,9 +7,12 @@ import productsRoutes from './src/routes/products/index.js';
 import { addGlobalData } from './src/middleware/index.js';
 import { setupDatabase, testConnection } from './src/models/setup.js';
 import dashboardRoutes from './src/routes/dashboard/index.js';
+import db from './src/models/db.js';
 import session from 'express-session';
 import pgSession from 'connect-pg-simple';
-import accountRoutes from '/src/routes/accounts/index.js';
+import accountRoutes from './src/routes/accounts/index.js';
+
+import flashMessages from './src/middleware/flash.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -55,6 +58,7 @@ app.use(session({
     }
 }));
 
+app.use(flashMessages);
 app.use('/', indexRoutes);
 app.use('/products', productsRoutes);
 app.use('/dashboard', dashboardRoutes);

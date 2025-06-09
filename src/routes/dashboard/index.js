@@ -3,10 +3,17 @@ import { getAllProducts, addProduct } from '../../models/products/index.js';
  
 const router = express.Router();
  
+
 /**
  * Dashboard home page - displays navigation to product management features
  */
 router.get('/', async (req, res, next) => {
+    if (!req.session.isLoggedIn) {
+        res.locals.errors.push('Please log in to access the dashboard');
+        return res.render('accounts/login', {
+            title: 'Login'
+        });
+    }
     try {
         const products = await getAllProducts();
         res.render('dashboard/index', {

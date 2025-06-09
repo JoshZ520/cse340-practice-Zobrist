@@ -35,9 +35,10 @@ router.post('/login', (req, res) => {
     req.session.isLoggedIn = true;
     req.session.username = username;
     req.session.loginTime = new Date();
- 
-    // Redirect to dashboard
+
+    req.flash('success', `Welcome back, ${username}! You have successfully logged in`);
     res.redirect('/accounts/dashboard');
+
 });
  
 /**
