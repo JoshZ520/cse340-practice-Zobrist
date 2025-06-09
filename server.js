@@ -7,6 +7,9 @@ import productsRoutes from './src/routes/products/index.js';
 import { addGlobalData } from './src/middleware/index.js';
 import { setupDatabase, testConnection } from './src/models/setup.js';
 import dashboardRoutes from './src/routes/dashboard/index.js';
+import session from 'express-session';
+import pgSession from 'connect-pg-simple';
+import accountRoutes from '/src/routes/accounts/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,9 +34,31 @@ app.set("views",  path.join(__dirname, 'src/views'));
 
 app.use(addGlobalData);
 
+// Configure PostgreSQL session store
+const PostgresStore = pgSession(session);
+ 
+// Configure session middleware
+app.use(session({
+    store: new PostgresStore({
+        pool: db, // Use your PostgreSQL connection
+        tableName: 'sessions', // Table name for storing sessions
+        createTableIfMissing: true // Creates table if it does not exist
+    }),
+    secret: process.env.SESSION_SECRET || "default-secret-change-in-production",
+    resave: false,
+    saveUninitialized: false,
+    name: "sessionId",
+    cookie: {
+        secure: false, // Set to true in production with HTTPS
+        httpOnly: true, // Prevents client-side access to the cookie
+        maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days in milliseconds
+    }
+}));
+
 app.use('/', indexRoutes);
 app.use('/products', productsRoutes);
 app.use('/dashboard', dashboardRoutes);
+app.use('/accounts', accountRoutes);
 
 app.get('/error', (req, res, next) => {
     const err = new Error('This is a manually triggered error');
